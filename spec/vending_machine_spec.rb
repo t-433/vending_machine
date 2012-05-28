@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+require 'simplecov'
+SimpleCov.start
 require 'rspec'
 
 require 'vending_machine'
@@ -418,5 +420,11 @@ describe VendingMachine do
 
       vending_machine.bingo?(Drink::COKE).should be_false
     end
+
+    it "0から99に収まっている" do
+      vending_machine.rand100.should >= 0
+      vending_machine.rand100.sholud < 100
+    end
+
   end
 end
