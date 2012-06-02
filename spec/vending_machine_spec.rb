@@ -22,11 +22,15 @@ end
 describe MoneyStock do
   it "10円が5枚、のち6枚に更新" do
     money_stock = MoneyStock.new(Money::TEN, 5)
+
     money_stock.money.should == Money::TEN
     money_stock.stock.should == 5
+    money_stock.should == MoneyStock.new(Money::TEN, 5)
+ 
     money_stock.stock = 6
     money_stock.stock.should == 6
-  end
+    money_stock.should == MoneyStock.new(Money::TEN, 6)
+   end
 end
 
 
@@ -49,10 +53,14 @@ end
 describe DrinkStock do
   it "コーラ、在庫5本で6本に更新" do
     drink_stock = DrinkStock.new(Drink::COKE, 5)
+
     drink_stock.drink.should == Drink::COKE
     drink_stock.stock.should == 5
+    drink_stock.should == DrinkStock.new(Drink::COKE, 5)
+ 
     drink_stock.stock = 6
     drink_stock.stock.should == 6
+    drink_stock.should == DrinkStock.new(Drink::COKE, 6)
   end
 end
 
@@ -264,10 +272,8 @@ describe VendingMachine do
     vending_machine.drop_in(Money::HUNDRED, Money::HUNDRED)
     vending_machine.purchase(Drink::RED_BULL)
 
-    vending_machine.bingo_drink_numbers[0].drink.should == Drink::COKE
-    vending_machine.bingo_drink_numbers[0].number.should == 1
-    vending_machine.bingo_drink_numbers[1].drink.should == Drink::RED_BULL
-    vending_machine.bingo_drink_numbers[1].number.should == 1
+    vending_machine.bingo_drink_numbers[0].should == DrinkNumber.new(Drink::COKE, 1)
+    vending_machine.bingo_drink_numbers[1].should == DrinkNumber.new(Drink::RED_BULL, 1)
 
     vending_machine.amount_of_bingos.should == 320
   end
@@ -296,8 +302,7 @@ describe VendingMachine do
     vending_machine.drop_in(Money::HUNDRED, Money::FIFTY)
 
     vending_machine.purchase?(Drink::COKE).should be_true
-    vending_machine.changes_if_purchase(Drink::COKE)[0].money.should == Money::TEN
-    vending_machine.changes_if_purchase(Drink::COKE)[0].stock.should == 3
+    vending_machine.changes_if_purchase(Drink::COKE)[0].should == MoneyStock.new(Money::TEN, 3)
 
     changes = vending_machine.purchase(Drink::COKE)
 
@@ -305,8 +310,7 @@ describe VendingMachine do
     vending_machine.drink_stock(Drink::COKE).should == 4
     vending_machine.amount_of_money_stocks.should == 150
     
-    changes[0].money.should == Money::TEN
-    changes[0].stock.should == 3
+    changes[0].should == MoneyStock.new(Money::TEN, 3)
   end
 
   it "150円でコーラを買おうとするがお釣りがないので買えない、無理矢理買おうとしても無理＞＜" do
@@ -338,8 +342,7 @@ describe VendingMachine do
     vending_machine.drop_in(Money::HUNDRED, Money::FIFTY)
 
     vending_machine.purchase?(Drink::COKE).should be_true
-    vending_machine.changes_if_purchase(Drink::COKE)[0].money.should == Money::TEN
-    vending_machine.changes_if_purchase(Drink::COKE)[0].stock.should == 3
+    vending_machine.changes_if_purchase(Drink::COKE)[0].should == MoneyStock.new(Money::TEN, 3)
 
     vending_machine.purchase(Drink::COKE)
 
@@ -368,8 +371,7 @@ describe VendingMachine do
         vending_machine.drop_in(Money::TEN, Money::TEN)
 
         vending_machine.change?(40).should be_true
-        vending_machine.changes(40)[0].money.should == Money::TEN
-        vending_machine.changes(40)[0].stock.should == 4
+        vending_machine.changes(40)[0].should == MoneyStock.new(Money::TEN, 4)
       end
 
       it "50円自動販売機にあって、20円投入して、60円のお釣りが払える場合" do
@@ -380,8 +382,7 @@ describe VendingMachine do
         vending_machine.changes(60)[0].stock.should == 1
         vending_machine.changes(60)[1].money.should == Money::TEN
         vending_machine.changes(60)[1].stock.should == 1
-        vending_machine.new_money_stock_after_change(60)[0].money.should == Money::TEN
-        vending_machine.new_money_stock_after_change(60)[0].stock.should == 1
+        vending_machine.new_money_stock_after_change(60)[0].should == MoneyStock.new(Money::TEN, 1)
       end
     end
 

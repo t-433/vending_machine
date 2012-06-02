@@ -25,6 +25,11 @@ class MoneyStock
     @money = money
     @stock = stock
   end
+
+  def ==(other)
+    @money == other.money && @stock == other.stock
+  end
+
 end
 
 
@@ -54,6 +59,11 @@ class DrinkStock
     @drink = drink
     @stock = stock
   end
+
+  def ==(other)
+    @drink == other.drink && @stock == other.stock
+  end
+
 end
 
 class DrinkNumber
@@ -64,6 +74,11 @@ class DrinkNumber
     @drink = drink
     @number = number
   end
+
+  def ==(other)
+    @drink == other.drink && @number == other.number
+  end
+
 end
 
 
