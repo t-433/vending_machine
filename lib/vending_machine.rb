@@ -179,9 +179,16 @@ class VendingMachine
     changes(amount_of_drop_in - drink.value) if purchase?(drink)
   end
 
+  def cancel 
+    drop_in_monies_for_cancel = @drop_in_money_stocks.map {|drop_in_money_stock| MoneyStock.new(drop_in_money_stock.money, drop_in_money_stock.stock) }
+    @drop_in_money_stocks.each { |drop_in_money_stock| drop_in_money_stock.stock = 0 }
+    drop_in_monies_for_cancel 
+  end
+
   def purchase(drink) 
     raise ArgumentError, drink unless purchase?(drink)
 
+    changes = changes_if_purchase(drink)
     @money_stocks = new_money_stock_after_change(amount_of_drop_in - drink.value)
     @drop_in_money_stocks.each { |drop_in_money_stock| drop_in_money_stock.stock = 0 }
 
@@ -189,6 +196,7 @@ class VendingMachine
     find_drink_stock(drink).stock = drink_stock(drink) - (bingo?(drink) ? 2 : 1)
 
     @earnings += drink.value
+    changes
   end
 
   def find_bingo_drink_number(drink)

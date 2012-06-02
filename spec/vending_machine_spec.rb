@@ -136,6 +136,19 @@ describe VendingMachine do
         vending_machine.amount_of_drop_in.should == 0
       end
     end
+    
+    describe "払い戻す場合" do
+      it "10円入れて払い戻すと10円が戻ってきて、現在の投入金額合計は0円" do
+        money = Money::TEN
+
+        vending_machine.drop_in(money)
+        drop_in_monies = vending_machine.cancel
+
+        drop_in_monies[0].money.should == Money::TEN
+        drop_in_monies[0].stock.should == 1
+        vending_machine.amount_of_drop_in.should == 0
+      end
+     end
   end
 
   describe "在庫状況を確認する" do
@@ -286,11 +299,14 @@ describe VendingMachine do
     vending_machine.changes_if_purchase(Drink::COKE)[0].money.should == Money::TEN
     vending_machine.changes_if_purchase(Drink::COKE)[0].stock.should == 3
 
-    vending_machine.purchase(Drink::COKE)
+    changes = vending_machine.purchase(Drink::COKE)
 
     vending_machine.earnings.should == 120
     vending_machine.drink_stock(Drink::COKE).should == 4
     vending_machine.amount_of_money_stocks.should == 150
+    
+    changes[0].money.should == Money::TEN
+    changes[0].stock.should == 3
   end
 
   it "150円でコーラを買おうとするがお釣りがないので買えない、無理矢理買おうとしても無理＞＜" do
@@ -423,7 +439,7 @@ describe VendingMachine do
 
     it "0から99に収まっている" do
       vending_machine.rand100.should >= 0
-      vending_machine.rand100.sholud < 100
+      vending_machine.rand100.should < 100
     end
 
   end
