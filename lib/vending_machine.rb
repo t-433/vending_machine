@@ -47,8 +47,6 @@ module Drink
   end
 
   COKE = Drink.new(1, "コーラ", 120)
-  RED_BULL = Drink.new(2, "レッドブル", 200)
-  WATER = Drink.new(3, "水", 100)
 end
 
 class DrinkStock
@@ -95,10 +93,8 @@ class VendingMachine
     @valid_moneis = [Money::TEN, Money::FIFTY, Money::HUNDRED, Money::FIVE_HUNDRED, Money::THOUSAND]
     @money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
     @drop_in_money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
-    @drink_stocks = [DrinkStock.new(Drink::COKE, 0), DrinkStock.new(Drink::RED_BULL, 0), DrinkStock.new(Drink::WATER, 0)]
-    @bingo_drink_numbers = [DrinkNumber.new(Drink::COKE, 0), DrinkNumber.new(Drink::RED_BULL, 0), DrinkNumber.new(Drink::WATER, 0)]
+    @drink_stocks = [DrinkStock.new(Drink::COKE, 0)]
     @earnings = 0
-    @bingo_on = false
   end
 
   def refill_money_stock(money, stock) 
@@ -207,28 +203,9 @@ class VendingMachine
     @money_stocks = new_money_stock_after_change(amount_of_drop_in - drink.value)
     @drop_in_money_stocks.each { |drop_in_money_stock| drop_in_money_stock.stock = 0 }
 
-    find_bingo_drink_number(drink).number += 1 if bingo?(drink)
-    find_drink_stock(drink).stock = drink_stock(drink) - (bingo?(drink) ? 2 : 1)
+    find_drink_stock(drink).stock = drink_stock(drink) - 1
 
     @earnings += drink.value
     changes
   end
-
-  def find_bingo_drink_number(drink)
-    @bingo_drink_numbers.find { |drink_number| drink_number.drink == drink }
-  end
-
-
-  def bingo?(drink)
-    bingo_on && drink_stock(drink) >= 2 && rand100 < 5
-  end
-
-  def rand100
-    rand(100)
-  end
-
-  def amount_of_bingos
-    @bingo_drink_numbers.inject(0) { |amount, bingo_drink_number| amount += bingo_drink_number.drink.value * bingo_drink_number.number }
-  end
-
 end
