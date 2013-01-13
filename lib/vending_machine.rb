@@ -101,7 +101,7 @@ class VendingMachine
     @valid_moneis = [Money::TEN, Money::FIFTY, Money::HUNDRED, Money::FIVE_HUNDRED, Money::THOUSAND]
     @money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
     @drop_in_money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
-    @drink_stocks = [DrinkStock.new(Drink::COKE, 5), DrinkStock.new(Drink::RED_BULL, 0), DrinkStock.new(Drink::WATER, 0)]
+    @drink_stocks = [DrinkStock.new(Drink::COKE, 0), DrinkStock.new(Drink::RED_BULL, 0), DrinkStock.new(Drink::WATER, 0)]
     @bingo_drink_numbers = [DrinkNumber.new(Drink::COKE, 0), DrinkNumber.new(Drink::RED_BULL, 0), DrinkNumber.new(Drink::WATER, 0)]
     @earnings = 0
     @bingo_on = false

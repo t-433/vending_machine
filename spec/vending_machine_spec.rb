@@ -84,7 +84,8 @@ describe VendingMachine do
     end
 
     it "コーラ5本格納されている" do
-      vending_machine.amount_of_drop_in.should == 0
+      pending("初期状態コーラ5本対応")
+      vending_machine.drink_stock(Drink::COKE).should == 5
     end
   end
 
