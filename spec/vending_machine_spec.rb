@@ -238,11 +238,27 @@ describe VendingMachine do
         vending_machine.purchaseable_drinks.should be_empty
       end
     end
+
     context "コーラとレッドブルと水そそれぞれ五本在庫としてある場合" do
       before do
         vending_machine.refill_drink_stock(Drink::COKE, 5)
         vending_machine.refill_drink_stock(Drink::RED_BULL, 5)
         vending_machine.refill_drink_stock(Drink::WATER, 5)
+      end
+
+      it "コーラが在庫としてストックされていること" do
+        vending_machine.drink_stock?(Drink::COKE).should be_true
+        vending_machine.drink_stock(Drink::COKE).should eq 5
+      end
+
+      it "レッドブルが在庫としてストックされていること" do
+        vending_machine.drink_stock?(Drink::RED_BULL).should be_true
+        vending_machine.drink_stock(Drink::RED_BULL).should eq 5
+      end
+
+      it "水が在庫としてストックされていること" do
+        vending_machine.drink_stock?(Drink::WATER).should be_true
+        vending_machine.drink_stock(Drink::WATER).should eq 5
       end
 
       it "100円で購入可能な商品を表示する" do
