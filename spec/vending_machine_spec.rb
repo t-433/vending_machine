@@ -17,7 +17,10 @@ describe Money do
   it "許されない通貨" do
     Money::ONE.value.should == 1
     Money::FIVE.value.should == 5
+    Money::FIVE_THOUSAND.value.should == 5000
+    Money::TEN_THOUSAND.value.should == 10000
   end
+  
 end
 
 describe MoneyStock do
@@ -33,7 +36,6 @@ describe MoneyStock do
     money_stock.should == MoneyStock.new(Money::TEN, 6)
    end
 end
-
 
 describe Drink do
   it "コーラ、レッドブル、水" do
@@ -117,6 +119,15 @@ describe VendingMachine do
       proc { vending_machine.drop_in(Money::FIVE)
       }.should raise_error
     end
+    it "5000円" do
+      proc { vending_machine.drop_in(Money::FIVE_THOUSAND)
+      }.should raise_error(ArgumentError)
+    end
+    it "10000円" do
+      proc { vending_machine.drop_in(Money::TEN_THOUSAND)
+      }.should raise_error(ArgumentError)
+    end
+
   end
 
   describe "2つ以上の有効なお金を入れた場合" do

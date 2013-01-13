@@ -15,6 +15,8 @@ module Money
   HUNDRED = Money.new(100)
   FIVE_HUNDRED = Money.new(500)
   THOUSAND = Money.new(1000)
+  FIVE_THOUSAND = Money.new(5000)
+  TEN_THOUSAND = Money.new(10000)
 end
 
 class MoneyStock
