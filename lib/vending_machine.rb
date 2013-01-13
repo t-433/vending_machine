@@ -44,6 +44,10 @@ module Drink
       @name = name
       @value = value
     end
+
+    def ==(other)
+      id == other.id
+    end
   end
 
   COKE = Drink.new(1, "コーラ", 120)
@@ -158,10 +162,12 @@ class VendingMachine
 
     moneis.each { |money| find_drop_in_money_stock(money).stock += 1 } 
   end
-
+  
   def find_drop_in_money_stock(money)
     @drop_in_money_stocks.find { |money_stock| money_stock.money == money }
   end
+private :find_drop_in_money_stock
+  
 
   def refill_drink_stock(drink, number_of_pieces) 
     find_drink_stock(drink).stock += number_of_pieces
@@ -177,6 +183,10 @@ class VendingMachine
 
   def find_drink_stock(drink)
     @drink_stocks.find { |drink_stock| drink_stock.drink == drink }
+  end
+
+  def drinks
+    drink_stocks.map(&:drink)
   end
 
   def purchaseable_drinks

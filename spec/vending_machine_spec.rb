@@ -49,6 +49,14 @@ describe Drink do
     Drink::WATER.name.should == "水"
     Drink::WATER.value.should == 100
   end
+
+  describe do
+    it "IDが同じであれば同じDrinkとして判断する" do 
+      one = Drink::Drink.new(10, 'one', 100)
+      two = Drink::Drink.new(10, 'two', 100)
+      one.should == two
+    end
+  end
 end
 
 describe DrinkStock do
@@ -160,6 +168,10 @@ describe VendingMachine do
      end
   end
 
+  describe "取り扱い商品を確認する" do
+    it { vending_machine.drinks.should include(Drink::COKE) }
+  end
+
   describe "在庫状況を確認する" do
     describe "コーラの在庫がない場合" do
       it do
@@ -204,6 +216,17 @@ describe VendingMachine do
       end
     end
 
+    context "120円いれたけど在庫がなかった場合" do 
+      before do
+        vending_machine.refill_drink_stock(Drink::COKE,0)
+        vending_machine.drop_in(Money::HUNDRED,Money::TEN,Money::TEN)
+      end
+
+      it "コーラが買えない" do
+#        vending_machine.purchaseable_drinks.should == [Drink::COKE]
+        vending_machine.purchaseable_drinks.should be_empty
+      end
+    end
     context "コーラとレッドブルと水そそれぞれ五本在庫としてある場合" do
       before do
         vending_machine.refill_drink_stock(Drink::COKE, 5)
