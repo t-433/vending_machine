@@ -263,10 +263,20 @@ describe VendingMachine do
         vending_machine.drink_stock(Drink::RED_BULL).should eq 5
       end
 
+
+      it "格納されているドリンクの名前を表示する" do
+        vending_machine.vending_machine_drinks[0].name.should eq "コーラ"
+      end
+
+      it "格納されているドリンクの値段を表示する" do
+        vending_machine.vending_machine_drinks[0].value.should eq 120
+      end
+
       it "水が在庫としてストックされていること" do
         vending_machine.drink_stock?(Drink::WATER).should be_true
         vending_machine.drink_stock(Drink::WATER).should eq 5
       end
+
 
       it "100円で購入可能な商品を表示する" do
         vending_machine.drop_in(Money::HUNDRED)

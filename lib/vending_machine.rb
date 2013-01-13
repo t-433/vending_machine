@@ -198,6 +198,10 @@ private :find_drop_in_money_stock
     }
   end
 
+  def vending_machine_drinks
+    @drink_stocks.map{ | drink_stock|  drink_stock.drink}
+  end
+
   def purchase?(drink)
     purchaseable_drinks.include?(drink)
   end
