@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 module Money
-  class Money 
+  class Money
     attr :value
 
     def initialize(value)
@@ -90,9 +90,9 @@ end
 
 class VendingMachine
   attr :valid_monies
-  attr :money_stocks 
-  attr :drop_in_money_stocks 
-  attr :drink_stocks 
+  attr :money_stocks
+  attr :drop_in_money_stocks
+  attr :drink_stocks
   attr :bingo_drink_numbers
   attr :earnings
   attr_accessor :bingo_on
@@ -101,13 +101,13 @@ class VendingMachine
     @valid_moneis = [Money::TEN, Money::FIFTY, Money::HUNDRED, Money::FIVE_HUNDRED, Money::THOUSAND]
     @money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
     @drop_in_money_stocks = @valid_moneis.map {|money| MoneyStock.new(money, 0)}
-    @drink_stocks = [DrinkStock.new(Drink::COKE, 0), DrinkStock.new(Drink::RED_BULL, 0), DrinkStock.new(Drink::WATER, 0)]
+    @drink_stocks = [DrinkStock.new(Drink::COKE, 5), DrinkStock.new(Drink::RED_BULL, 0), DrinkStock.new(Drink::WATER, 0)]
     @bingo_drink_numbers = [DrinkNumber.new(Drink::COKE, 0), DrinkNumber.new(Drink::RED_BULL, 0), DrinkNumber.new(Drink::WATER, 0)]
     @earnings = 0
     @bingo_on = false
   end
 
-  def refill_money_stock(money, stock) 
+  def refill_money_stock(money, stock)
     find_money_stock(money).stock += stock
   end
 
@@ -128,7 +128,7 @@ class VendingMachine
     new_money_stock = []
 
     changes = []
-    remainder = change 
+    remainder = change
     @valid_moneis.reverse.each {|money|
       quotient = remainder / money.value
       current_money_stock = current_total_money_stocks.find { |money_stock| money_stock.money == money }.stock
@@ -142,8 +142,8 @@ class VendingMachine
 
 
   def create_current_total_money_stocks
-    @money_stocks.zip(@drop_in_money_stocks).map {|item| 
-      MoneyStock.new(item[0].money, item[0].stock + item[1].stock) 
+    @money_stocks.zip(@drop_in_money_stocks).map {|item|
+      MoneyStock.new(item[0].money, item[0].stock + item[1].stock)
     }
   end
 
@@ -162,16 +162,16 @@ class VendingMachine
   def drop_in(*moneis)
     moneis.each { |money| raise ArgumentError, money.value unless @valid_moneis.include?(money) }
 
-    moneis.each { |money| find_drop_in_money_stock(money).stock += 1 } 
+    moneis.each { |money| find_drop_in_money_stock(money).stock += 1 }
   end
-  
+
   def find_drop_in_money_stock(money)
     @drop_in_money_stocks.find { |money_stock| money_stock.money == money }
   end
 private :find_drop_in_money_stock
-  
 
-  def refill_drink_stock(drink, number_of_pieces) 
+
+  def refill_drink_stock(drink, number_of_pieces)
     find_drink_stock(drink).stock += number_of_pieces
   end
 
@@ -180,7 +180,7 @@ private :find_drop_in_money_stock
   end
 
   def drink_stock(drink)
-    find_drink_stock(drink).stock 
+    find_drink_stock(drink).stock
   end
 
   def find_drink_stock(drink)
@@ -192,7 +192,7 @@ private :find_drop_in_money_stock
   end
 
   def purchaseable_drinks
-    @drink_stocks.inject([]) { |drinks, drink_stock| 
+    @drink_stocks.inject([]) { |drinks, drink_stock|
       drinks << drink_stock.drink if drink_stock?(drink_stock.drink) && drink_stock.drink.value <= amount_of_drop_in() && change?(amount_of_drop_in - drink_stock.drink.value)
       drinks
     }
@@ -206,13 +206,13 @@ private :find_drop_in_money_stock
     changes(amount_of_drop_in - drink.value) if purchase?(drink)
   end
 
-  def cancel 
+  def cancel
     drop_in_monies_for_cancel = @drop_in_money_stocks.map {|drop_in_money_stock| MoneyStock.new(drop_in_money_stock.money, drop_in_money_stock.stock) }
     @drop_in_money_stocks.each { |drop_in_money_stock| drop_in_money_stock.stock = 0 }
-    drop_in_monies_for_cancel 
+    drop_in_monies_for_cancel
   end
 
-  def purchase(drink) 
+  def purchase(drink)
     raise ArgumentError, drink unless purchase?(drink)
 
     changes = changes_if_purchase(drink)

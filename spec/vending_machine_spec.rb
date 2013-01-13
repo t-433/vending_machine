@@ -78,8 +78,14 @@ end
 describe VendingMachine do
   let(:vending_machine) {VendingMachine.new}
 
-  it "初期状態では合計金額が０円" do
-    vending_machine.amount_of_drop_in.should == 0
+  context "初期状態" do
+    it "合計金額が０円" do
+      vending_machine.amount_of_drop_in.should == 0
+    end
+
+    it "コーラ5本格納されている" do
+      vending_machine.amount_of_drop_in.should == 0
+    end
   end
 
   describe "お金を1つだけ投入する場合" do
