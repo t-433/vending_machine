@@ -112,7 +112,7 @@ describe VendingMachine do
 
   describe "許可しないお金を入れた場合" do
     it "1円" do
-      proc { vending_machine.drop_in(Money::One)
+      proc { vending_machine.drop_in(Money::ONE)
       }.should raise_error(ArgumentError)
     end
     it "5円" do
