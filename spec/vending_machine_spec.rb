@@ -299,6 +299,19 @@ describe VendingMachine do
     end
   end
 
+  context "購入金額以上のお金を投入した場合、売上の確認" do
+    before do
+    end
+
+    it "売上が120円である" do
+      pending("お釣りが無いため")
+      vending_machine.refill_drink_stock(Drink::COKE, 5)
+      vending_machine.drop_in(Money::HUNDRED, Money::HUNDRED, Money::HUNDRED)
+      vending_machine.purchase(Drink::COKE)
+      vending_machine.earnings.should == 120
+    end
+  end
+
   it "120円でコーラを買う" do
     vending_machine.refill_drink_stock(Drink::COKE, 5)
     vending_machine.drop_in(Money::HUNDRED, Money::TEN, Money::TEN)
