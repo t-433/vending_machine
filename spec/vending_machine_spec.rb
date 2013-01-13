@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 #
-require 'simplecov'
-SimpleCov.start
 require 'rspec'
 
 require 'vending_machine'
