@@ -20,7 +20,7 @@ describe Money do
     Money::FIVE_THOUSAND.value.should == 5000
     Money::TEN_THOUSAND.value.should == 10000
   end
-  
+
 end
 
 describe MoneyStock do
@@ -30,7 +30,7 @@ describe MoneyStock do
     money_stock.money.should == Money::TEN
     money_stock.stock.should == 5
     money_stock.should == MoneyStock.new(Money::TEN, 5)
- 
+
     money_stock.stock = 6
     money_stock.stock.should == 6
     money_stock.should == MoneyStock.new(Money::TEN, 6)
@@ -47,13 +47,13 @@ describe Drink do
     Drink::RED_BULL.name.should == "レッドブル"
     Drink::RED_BULL.value.should == 200
 
-    Drink::WATER.id.should == 3 
+    Drink::WATER.id.should == 3
     Drink::WATER.name.should == "水"
     Drink::WATER.value.should == 100
   end
 
   describe do
-    it "IDが同じであれば同じDrinkとして判断する" do 
+    it "IDが同じであれば同じDrinkとして判断する" do
       one = Drink::Drink.new(10, 'one', 100)
       two = Drink::Drink.new(10, 'two', 100)
       one.should == two
@@ -68,7 +68,7 @@ describe DrinkStock do
     drink_stock.drink.should == Drink::COKE
     drink_stock.stock.should == 5
     drink_stock.should == DrinkStock.new(Drink::COKE, 5)
- 
+
     drink_stock.stock = 6
     drink_stock.stock.should == 6
     drink_stock.should == DrinkStock.new(Drink::COKE, 6)
@@ -113,11 +113,11 @@ describe VendingMachine do
   describe "許可しないお金を入れた場合" do
     it "1円" do
       proc { vending_machine.drop_in(Money::One)
-      }.should raise_error
+      }.should raise_error(ArgumentError)
     end
     it "5円" do
       proc { vending_machine.drop_in(Money::FIVE)
-      }.should raise_error
+      }.should raise_error(ArgumentError)
     end
     it "5000円" do
       proc { vending_machine.drop_in(Money::FIVE_THOUSAND)
@@ -164,7 +164,7 @@ describe VendingMachine do
         vending_machine.amount_of_drop_in.should == 0
       end
     end
-    
+
     describe "払い戻す場合" do
       it "10円入れて払い戻すと10円が戻ってきて、現在の投入金額合計は0円" do
         money = Money::TEN
@@ -227,7 +227,7 @@ describe VendingMachine do
       end
     end
 
-    context "120円いれたけど在庫がなかった場合" do 
+    context "120円いれたけど在庫がなかった場合" do
       before do
         vending_machine.refill_drink_stock(Drink::COKE,0)
         vending_machine.drop_in(Money::HUNDRED,Money::TEN,Money::TEN)
@@ -319,7 +319,7 @@ describe VendingMachine do
     vending_machine.refill_drink_stock(Drink::COKE, 2)
 
     def vending_machine.rand100
-      5  
+      5
     end
 
     vending_machine.drop_in(Money::HUNDRED, Money::TEN, Money::TEN)
@@ -344,7 +344,7 @@ describe VendingMachine do
     vending_machine.earnings.should == 120
     vending_machine.drink_stock(Drink::COKE).should == 4
     vending_machine.amount_of_money_stocks.should == 150
-    
+
     changes[0].should == MoneyStock.new(Money::TEN, 3)
   end
 
